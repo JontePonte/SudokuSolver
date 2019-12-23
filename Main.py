@@ -9,30 +9,34 @@ class SudokuSolver:
     """ Main class to call everything """
     def __init__(self):
         self.squares = self.load_sudoku()
+        self.print_sudoku()
 
     def check_possibilities(self):
         """ A method that check if there is just one number left in square.possible and set number there after """
         pass
 
     def load_sudoku(self):
-        """ Load sudoku from file and put the inforation in [squares]"""
+        """ Load sudoku from file and put the inforation in squares-list"""
         # Create the list that will be returned
         squares = []
 
         # loop through the sudoku rows
         y = 0
+        id_num = 0
         for row in sudoku:
             square_row = []                 # Create row of Squares-objects that will be stored in squares
             x = 0
             for number in row:
                 square = Square()           # Create a Square-object
                 square.number = number      # Save the number in the Square-object
+                square.id_num = id_num
                 square.x_cor = x            # Save the coordinates in Square-object
                 square.y_cor = y
 
                 # Call a method that calculates the box number
                 square.box = self.set_box_number(square.x_cor, square.y_cor)
 
+                id_num += 1
                 x += 1
                 square_row.append(square)   # Save the Square-object in the row-list
             squares.append(square_row)      # and save the row in the squares-list
@@ -41,7 +45,17 @@ class SudokuSolver:
 
     def print_sudoku(self):
         """ A method that prints the current squares-list """
-        pass
+        output = []
+        # Create list in lists for all square numbers
+        for row in self.squares:
+            output_row = []
+            for square in row:
+                output_row.append(square.number)
+            output.append(output_row)
+
+        # Print the numbers in output-list
+        for row in output:
+            print(row)
 
     def remove_simple_possibilities(self):
         """ A method that checks the rows, coloms and boxes and removes any simple possibilities for the Squares"""

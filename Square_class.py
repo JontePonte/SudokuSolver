@@ -8,4 +8,5 @@ class Square:
         self.box = 0        # the box number the square belongs to
 
         self.number = 0                                 # 0 means not defined
+        self.id_num = 0                                 # ID-number for all the squares
         self.possible = [1, 2, 3, 4, 5, 6, 7, 8, 9]     # Array with all possible values for the square

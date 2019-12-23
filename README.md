@@ -13,3 +13,4 @@ Input a sudoku square and let the program solve it for you
     - [ ] Remove possible numbers based on combinations of numbers elsewere
 - [ ] Create a very advanced solution method
     - [ ] Test numbers if the other methods fail
+- [ ] Better input for the sudoku

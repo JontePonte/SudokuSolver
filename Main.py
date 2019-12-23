@@ -8,11 +8,14 @@ from Square_class import Square
 class SudokuSolver:
     """ Main class to call everything """
     def __init__(self):
+        # Load the sudoku from "Sudoku.py" to squares
         self.squares = self.load_sudoku()
+
+        # Print the sudoku output
         self.print_sudoku()
 
-    def check_possibilities(self):
-        """ A method that check if there is just one number left in square.possible and set number there after """
+    def check_finished(self):
+        """ Check if the win or fail conditions has ben met """
         pass
 
     def load_sudoku(self):
@@ -86,6 +89,10 @@ class SudokuSolver:
             elif 6 <= x <= 8:
                 box_number = 8
         return box_number           # not pretty but it works
+
+    def set_numbers(self):
+        """ A method that check if there is just one number left in square.possible and set number there after """
+        pass
 
 
 run = SudokuSolver()

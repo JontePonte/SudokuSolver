@@ -1,5 +1,5 @@
 
-""" A program to solve a Suoku square """
+""" A program to solve a Suoku """
 
 from Sudoku import sudoku
 from Square_class import Square
@@ -9,6 +9,10 @@ class SudokuSolver:
     """ Main class to call everything """
     def __init__(self):
         self.squares = self.load_sudoku()
+
+    def check_possibilities(self):
+        """ A method that check if there is just one number left in square.possible and set number there after """
+        pass
 
     def load_sudoku(self):
         """ Load sudoku from file and put the inforation in [squares]"""
@@ -35,6 +39,14 @@ class SudokuSolver:
             y += 1
         return squares
 
+    def print_sudoku(self):
+        """ A method that prints the current squares-list """
+        pass
+
+    def remove_simple_possibilities(self):
+        """ A method that checks the rows, coloms and boxes and removes any simple possibilities for the Squares"""
+        pass
+
     def set_box_number(self, x, y):
         """ Get the number of the box the hard way... """
         box_number = 0
@@ -59,7 +71,7 @@ class SudokuSolver:
                 box_number = 7
             elif 6 <= x <= 8:
                 box_number = 8
-        return box_number
+        return box_number           # not pretty but it works
 
 
 run = SudokuSolver()

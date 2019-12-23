@@ -10,13 +10,30 @@ class SudokuSolver:
     def __init__(self):
         # Load the sudoku from "Sudoku.py" to squares
         self.squares = self.load_sudoku()
+        self.tries = 0
+        self.max_tries = 10
+
+        # Try to solve as long as the sudoku is not finnished
+        while not self.is_finished():
+            # Remove the squares possibilities base on rows, columns, and boxes
+            self.remove_simple_possibilities()
+
+            # Set squares numbers if there is jus one possibility
+            self.set_numbers()
+            self.tries += 1
 
         # Print the sudoku output
         self.print_sudoku()
 
-    def check_finished(self):
+    def is_finished(self):
         """ Check if the win or fail conditions has ben met """
-        pass
+        check = False
+
+        # check if the maximum allowed tries has been done
+        if self.tries >= self.max_tries:
+            check = True
+
+        return check
 
     def load_sudoku(self):
         """ Load sudoku from file and put the inforation in squares-list"""

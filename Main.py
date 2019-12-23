@@ -3,6 +3,7 @@
 
 from Sudoku import sudoku
 from Square_class import Square
+from functions import set_box_number
 
 
 class SudokuSolver:
@@ -11,15 +12,13 @@ class SudokuSolver:
         # Load the sudoku from "Sudoku.py" to squares
         self.squares = self.load_sudoku()
         self.tries = 0
-        self.max_tries = 10
+        self.max_tries = 10000
 
         # Try to solve as long as the sudoku is not finnished
         while not self.is_finished():
             # Remove the squares possibilities base on rows, columns, and boxes
-            self.remove_simple_possibilities()
+            self.remove_possibilities_simple()
 
-            # Set squares numbers if there is jus one possibility
-            self.set_numbers()
             self.tries += 1
 
         # Print the sudoku output
@@ -54,7 +53,7 @@ class SudokuSolver:
                 square.y_cor = y
 
                 # Call a method that calculates the box number
-                square.box = self.set_box_number(square.x_cor, square.y_cor)
+                square.box = set_box_number(square.x_cor, square.y_cor)
 
                 id_num += 1
                 x += 1
@@ -77,39 +76,15 @@ class SudokuSolver:
         for row in output:
             print(row)
 
-    def remove_simple_possibilities(self):
-        """ A method that checks the rows, coloms and boxes and removes any simple possibilities for the Squares"""
-        pass
-
-    def set_box_number(self, x, y):
-        """ Get the number of the box the hard way... """
-        box_number = 0
-        if y <= 2:
-            if x <= 2:
-                box_number = 0
-            elif 3 <= x <= 5:
-                box_number = 1
-            elif 6 <= x <= 8:
-                box_number = 2
-        elif 3 <= y <= 5:
-            if x <= 2:
-                box_number = 3
-            elif 3 <= x <= 5:
-                box_number = 4
-            elif 6 <= x <= 8:
-                box_number = 5
-        elif 6 <= y <= 8:
-            if x <= 2:
-                box_number = 6
-            elif 3 <= x <= 5:
-                box_number = 7
-            elif 6 <= x <= 8:
-                box_number = 8
-        return box_number           # not pretty but it works
-
-    def set_numbers(self):
-        """ A method that check if there is just one number left in square.possible and set number there after """
-        pass
+    def remove_possibilities_simple(self):
+        """ A method that checks the rows, columns and boxes and removes any simple possibilities for the Squares"""
+        # Loop through the squares to check them
+        for row in self.squares:
+            for square in row:
+                # The square has to not defined
+                if square.number == 0:
+                    pass
 
 
+# Run the program
 run = SudokuSolver()

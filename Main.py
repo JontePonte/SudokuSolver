@@ -1,4 +1,3 @@
-
 """ A program to solve a Suoku """
 
 from Sudoku import sudoku
@@ -8,6 +7,7 @@ from functions import set_box_number
 
 class SudokuSolver:
     """ Main class to call everything """
+
     def __init__(self):
         # Load the sudoku from "Sudoku.py" to squares
         self.squares = self.load_sudoku()
@@ -43,13 +43,13 @@ class SudokuSolver:
         y = 0
         id_num = 0
         for row in sudoku:
-            square_row = []                 # Create row of Squares-objects that will be stored in squares
+            square_row = []  # Create row of Squares-objects that will be stored in squares
             x = 0
             for number in row:
-                square = Square()           # Create a Square-object
-                square.number = number      # Save the number in the Square-object
+                square = Square()  # Create a Square-object
+                square.number = number  # Save the number in the Square-object
                 square.id_num = id_num
-                square.x_cor = x            # Save the coordinates in Square-object
+                square.x_cor = x  # Save the coordinates in Square-object
                 square.y_cor = y
 
                 # Call a method that calculates the box number
@@ -57,8 +57,8 @@ class SudokuSolver:
 
                 id_num += 1
                 x += 1
-                square_row.append(square)   # Save the Square-object in the row-list
-            squares.append(square_row)      # and save the row in the squares-list
+                square_row.append(square)  # Save the Square-object in the row-list
+            squares.append(square_row)  # and save the row in the squares-list
             y += 1
         return squares
 
@@ -79,11 +79,18 @@ class SudokuSolver:
     def remove_possibilities_simple(self):
         """ A method that checks the rows, columns and boxes and removes any simple possibilities for the Squares"""
         # Loop through the squares to check them
-        for row in self.squares:
-            for square in row:
-                # The square has to not defined
-                if square.number == 0:
-                    pass
+        for row_check in self.squares:
+            for square_check in row_check:
+                # The square has to not be defined
+                if square_check.number == 0:
+                    # loop through all the other squares
+                    for row_loop in self.squares:
+                        for square_loop in row_loop:
+                            if (square_check.x_cor == square_loop.x_cor
+                                    or square_check.y_cor == square_loop.y_cor
+                                    or square_check.box == square_loop.box):
+                                if not square_check.id_num == square_loop.id_num:
+                                    square_check.possible.remove(square_loop.number)
 
 
 # Run the program

@@ -12,7 +12,8 @@ class SudokuSolver:
         # Load the sudoku from "Sudoku.py" to squares
         self.squares = self.load_sudoku()
         self.tries = 0
-        self.max_tries = 10000
+        self.max_tries = 1000
+        self.print_sudoku()
 
         # Try to solve as long as the sudoku is not finnished
         while not self.is_finished():
@@ -75,6 +76,7 @@ class SudokuSolver:
         # Print the numbers in output-list
         for row in output:
             print(row)
+        print(" ")
 
     def remove_possibilities_simple(self):
         """ A method that checks the rows, columns and boxes and removes any simple possibilities for the Squares"""
@@ -86,11 +88,18 @@ class SudokuSolver:
                     # loop through all the other squares
                     for row_loop in self.squares:
                         for square_loop in row_loop:
+                            # Check if looped square is in the same row, column or box as the cecked square
                             if (square_check.x_cor == square_loop.x_cor
                                     or square_check.y_cor == square_loop.y_cor
                                     or square_check.box == square_loop.box):
+                                # Check so that the square does not interact with it self
                                 if not square_check.id_num == square_loop.id_num:
-                                    square_check.possible.remove(square_loop.number)
+                                    # Remove the looped squares number if it is in the possible number for square_check
+                                    if square_loop.number in square_check.possible:
+                                        square_check.possible.remove(square_loop.number)
+                                    # Set the right number if there is just one possibility
+                                    if len(square_check.possible) == 1:
+                                        square_check.number = square_check.possible[0]
 
 
 # Run the program

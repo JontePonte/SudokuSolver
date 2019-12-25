@@ -12,13 +12,16 @@ class SudokuSolver:
         # Load the sudoku from "Sudoku.py" to squares
         self.squares = self.load_sudoku()
         self.tries = 0
-        self.max_tries = 1000
+        self.max_tries = 100
         self.print_sudoku()
 
         # Try to solve as long as the sudoku is not finnished
         while not self.is_finished():
             # Remove the squares possibilities base on rows, columns, and boxes
             self.remove_possibilities_simple()
+
+            # Set numbers if they are possible just ones in a row, column or box
+            self.check_possibilities_simple()
 
             # Remove the square possibilities base on combinations of other combinations
             self.remove_possibilities_combinations()
@@ -27,6 +30,65 @@ class SudokuSolver:
 
         # Print the sudoku output
         self.print_sudoku()
+
+    def check_possibilities_simple(self):
+        """ Set numbers if they are possible just ones in a row, column or box"""
+
+        # Lists of possibilities for rows, columns and boxes
+        row_poss = []
+        column_poss = []
+        box_poss = []
+
+        # Save all possibilities for rows, columns and boxes with index "index"
+        for index in range(9):
+            for square in self.squares:
+                if square.y_cor == index:
+                    row_poss.append(square.possible)
+                if square.x_cor == index:
+                    column_poss.append(square.possible)
+                if square.box == index:
+                    box_poss.append([square.possible, square.x_cor, square.y_cor])
+
+            # Count the number of times the number exists in the lists
+            for number in range(9):
+
+                row_counter = 0
+                row_right_index = 0
+                column_counter = 0
+                column_right_index = 0
+                box_counter = 0
+                box_x_cor = 0
+                box_y_cor = 0
+
+                for possibility, row_index in zip(row_poss, range(len(row_poss))):
+                    if number in possibility:
+                        row_counter += 1
+                        row_right_index = row_index
+                for possibility, column_index in zip(column_poss, range(len(column_poss))):
+                    if number in possibility:
+                        column_counter += 1
+                        column_right_index = column_index
+                for possibility in box_poss:
+                    if number in possibility[0]:
+                        box_counter += 1
+                        box_x_cor = possibility[1]
+                        box_y_cor = possibility[2]
+
+                if row_counter == 1:
+                    for square in self.squares:
+                        if square.y_cor == index and square.x_cor == row_right_index:
+                            square.number = number
+                            square.possible = [number]
+                if column_counter == 1:
+                    for square in self.squares:
+                        if square.x_cor == index and square.y_cor == column_right_index:
+                            square.number = number
+                            square.possible = [number]
+                if box_counter == 1:
+                    for square in self.squares:
+                        if square.x_cor == box_x_cor and square.y_cor == box_y_cor:
+                            square.number = number
+                            square.possible = [number]
 
     def is_finished(self):
         """ Check if the win or fail conditions has ben met """
@@ -61,10 +123,12 @@ class SudokuSolver:
         for row in sudoku:
             x = 0
             for number in row:
-                square = Square()  # Create a Square-object
-                square.number = number  # Save the number in the Square-object
+                square = Square()                   # Create a Square-object
+                square.number = number              # Save the number in the Square-object
+                if number != 0:                     # If the number is known
+                    square.possible = [number]      # then the number is the only possibility
                 square.id_num = id_num
-                square.x_cor = x  # Save the coordinates in Square-object
+                square.x_cor = x                    # Save the coordinates in Square-object
                 square.y_cor = y
 
                 # Call a method that calculates the box number

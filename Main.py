@@ -20,7 +20,10 @@ class SudokuSolver:
             # Remove the squares possibilities base on rows, columns, and boxes
             self.remove_possibilities_simple()
 
-            self.tries += 1
+            # Remove the square possibilities base on combinations of other combinations
+            self.remove_possibilities_combinations()
+
+            self.tries += 1       # Count the number of iterations
 
         # Print the sudoku output
         self.print_sudoku()
@@ -88,6 +91,10 @@ class SudokuSolver:
         for row in output:
             print(row)
         print(" ")
+
+    def remove_possibilities_combinations(self):
+        """ Remove possibilities based on combination of the other squares combinations """
+        pass
 
     def remove_possibilities_simple(self):
         """ A method that checks the rows, columns and boxes and removes any simple possibilities for the Squares"""

@@ -7,8 +7,8 @@ Input a sudoku square and let the program solve it for you
 - [x] Add ID-number for each square
 - [x] Create simple solution loop
     - [x] Loop trough the square-list and remove possible numbers
-    - [ ] Create a win condition
-    - [ ] Create a failure condition
+    - [x] Create a win condition
+    - [x] Create a failure condition
 - [ ] Create a more advance solution method
     - [x] Add more advanced sudoku to test on
     - [ ] Remove possible numbers based on combinations of numbers elsewere

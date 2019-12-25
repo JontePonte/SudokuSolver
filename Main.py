@@ -27,11 +27,23 @@ class SudokuSolver:
 
     def is_finished(self):
         """ Check if the win or fail conditions has ben met """
-        check = False
 
-        # check if the maximum allowed tries has been done
+        # Check if all squares have numbers
+        check = True
+        counter = len(self.squares)
+        for square in self.squares:
+            if square.number == 0:
+                check = False
+                counter -= 1
+
+        # Print happy statement if the sudoku is solved
+        if counter == len(self.squares):
+            print("The sudoku was solved after", self.tries, "iterations")
+
+        # Check if the maximum allowed tries has been done
         if self.tries >= self.max_tries:
             check = True
+            print("The sudoku could not be solved after", self.tries, "iterations...")
 
         return check
 

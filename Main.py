@@ -44,7 +44,6 @@ class SudokuSolver:
         y = 0
         id_num = 0
         for row in sudoku:
-            square_row = []  # Create row of Squares-objects that will be stored in squares
             x = 0
             for number in row:
                 square = Square()  # Create a Square-object
@@ -58,20 +57,20 @@ class SudokuSolver:
 
                 id_num += 1
                 x += 1
-                square_row.append(square)  # Save the Square-object in the row-list
-            squares.append(square_row)  # and save the row in the squares-list
+                squares.append(square)  # Save the Square in the squares-list
             y += 1
         return squares
 
     def print_sudoku(self):
         """ A method that prints the current squares-list """
         output = []
+        output_row = []
         # Create list in lists for all square numbers
-        for row in self.squares:
-            output_row = []
-            for square in row:
-                output_row.append(square.number)
-            output.append(output_row)
+        for square in self.squares:
+            output_row.append(square.number)
+            if square.x_cor == 8:
+                output.append(output_row)
+                output_row = []
 
         # Print the numbers in output-list
         for row in output:
@@ -81,25 +80,23 @@ class SudokuSolver:
     def remove_possibilities_simple(self):
         """ A method that checks the rows, columns and boxes and removes any simple possibilities for the Squares"""
         # Loop through the squares to check them
-        for row_check in self.squares:
-            for square_check in row_check:
-                # The square has to not be defined
-                if square_check.number == 0:
-                    # loop through all the other squares
-                    for row_loop in self.squares:
-                        for square_loop in row_loop:
-                            # Check if looped square is in the same row, column or box as the cecked square
-                            if (square_check.x_cor == square_loop.x_cor
-                                    or square_check.y_cor == square_loop.y_cor
-                                    or square_check.box == square_loop.box):
-                                # Check so that the square does not interact with it self
-                                if not square_check.id_num == square_loop.id_num:
-                                    # Remove the looped squares number if it is in the possible number for square_check
-                                    if square_loop.number in square_check.possible:
-                                        square_check.possible.remove(square_loop.number)
-                                    # Set the right number if there is just one possibility
-                                    if len(square_check.possible) == 1:
-                                        square_check.number = square_check.possible[0]
+        for square_check in self.squares:
+            # The square has to not be defined
+            if square_check.number == 0:
+                # loop through all the other squares
+                for square_loop in self.squares:
+                    # Check if looped square is in the same row, column or box as the cecked square
+                    if (square_check.x_cor == square_loop.x_cor
+                            or square_check.y_cor == square_loop.y_cor
+                            or square_check.box == square_loop.box):
+                        # Check so that the square does not interact with it self
+                        if not square_check.id_num == square_loop.id_num:
+                            # Remove the looped squares number if it is in the possible number for square_check
+                            if square_loop.number in square_check.possible:
+                                square_check.possible.remove(square_loop.number)
+                            # Set the right number if there is just one possibility
+                            if len(square_check.possible) == 1:
+                                square_check.number = square_check.possible[0]
 
 
 # Run the program

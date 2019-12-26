@@ -7,7 +7,7 @@ Input a sudoku square and let the program solve it for you
 - [x] Add ID-number for each square
 - [x] Create simple solution loop
     - [x] Loop trough the square-list and remove possible numbers
-    - [ ] Check if numbers in a row, column or box just have one possibility
+    - [x] Check if numbers in a row, column or box just have one possibility
     - [x] Create a win condition
     - [x] Create a failure condition
 - [ ] Create a more advance solution method

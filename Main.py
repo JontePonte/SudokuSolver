@@ -34,7 +34,7 @@ class SudokuSolver:
     def check_possibilities_simple(self):
         """ Set numbers if they are possible just ones in a row, column or box"""
 
-        # Check if a possibility appears just once i the rows
+        """ Check if a possibility appears just once i the rows """
         for row_number in range(9):
             # Save all possibilities for one row
             row_possibilities = []
@@ -42,7 +42,7 @@ class SudokuSolver:
                 if square.y_cor == row_number:
                     row_possibilities.append(square.possible)
 
-            # Count the number of times each number exists in the lists
+            # Count the number of times each number exists in row_possibilities
             for number in range(1, 10):
 
                 number_counter = 0      # The number of times a number appears in row_possibilities
@@ -61,31 +61,62 @@ class SudokuSolver:
                             square.number = number
                             square.possible = [number]
 
-        # boxes
-        box_poss = []
+        """ Check if a possibility appears just once i the columns """
+        for column_number in range(9):
+            # Save all possibilities for one column
+            column_possibilities = []
+            for square in self.squares:
+                if square.x_cor == column_number:
+                    column_possibilities.append(square.possible)
+
+            # Count the number of times each number exists in column_possibilities
+            for number in range(1, 10):
+
+                number_counter = 0      # The number of times a number appears in column_possibilities
+                right_y_cor = 0         # The right y coordinate for the number
+
+                # Do the counting, if a number appears once ==> number_counter == 1
+                for possibility, y_cor in zip(column_possibilities, range(len(column_possibilities))):
+                    if number in possibility:
+                        number_counter += 1
+                        right_y_cor = y_cor
+
+                # Put the number in the right place if it appears just once
+                if number_counter == 1:
+                    for square in self.squares:
+                        if square.x_cor == column_number and square.y_cor == right_y_cor:
+                            square.number = number
+                            square.possible = [number]
+
+        """ Check if possibilities appears just once in the boxes """
         for row_number in range(9):
+            # Save possibilities for one box
+            box_poss = []
             for square in self.squares:
                 if square.box == row_number:
                     box_poss.append([square.possible, square.x_cor, square.y_cor])
 
-            # Count the number of times the number exists in the lists
-            for number in range(9):
+            # Count the number of times the number exists in box_possibilities
+            for number in range(1, 10):
 
                 box_counter = 0
                 box_x_cor = 0
                 box_y_cor = 0
 
+                # Do the counting, if a number appears once ==> number_counter == 1
                 for possibility in box_poss:
                     if number in possibility[0]:
                         box_counter += 1
-                        box_x_cor = possibility[1]
+                        box_x_cor = possibility[1]      # Save coordinates for the right box
                         box_y_cor = possibility[2]
 
+                # Put the number in the right place if it appears just once
                 if box_counter == 1:
                     for square in self.squares:
                         if square.x_cor == box_x_cor and square.y_cor == box_y_cor:
                             square.number = number
                             square.possible = [number]
+
 
     def is_finished(self):
         """ Check if the win or fail conditions has ben met """

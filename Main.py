@@ -34,56 +34,53 @@ class SudokuSolver:
     def check_possibilities_simple(self):
         """ Set numbers if they are possible just ones in a row, column or box"""
 
-        # Lists of possibilities for rows, columns and boxes
-        row_poss = []
-        column_poss = []
-        box_poss = []
-
-        # Save all possibilities for rows, columns and boxes with index "index"
-        for index in range(9):
+        # Check if a possibility appears just once i the rows
+        for row_number in range(9):
+            # Save all possibilities for one row
+            row_possibilities = []
             for square in self.squares:
-                if square.y_cor == index:
-                    row_poss.append(square.possible)
-                if square.x_cor == index:
-                    column_poss.append(square.possible)
-                if square.box == index:
+                if square.y_cor == row_number:
+                    row_possibilities.append(square.possible)
+
+            # Count the number of times each number exists in the lists
+            for number in range(1, 10):
+
+                number_counter = 0      # The number of times a number appears in row_possibilities
+                right_x_cor = 0         # The right x coordinate for the number
+
+                # Do the counting, if a number appears once ==> number_counter == 1
+                for possibility, x_cor in zip(row_possibilities, range(len(row_possibilities))):
+                    if number in possibility:
+                        number_counter += 1
+                        right_x_cor = x_cor
+
+                # Put the number in the right place if it appears just once
+                if number_counter == 1:
+                    for square in self.squares:
+                        if square.y_cor == row_number and square.x_cor == right_x_cor:
+                            square.number = number
+                            square.possible = [number]
+
+        # boxes
+        box_poss = []
+        for row_number in range(9):
+            for square in self.squares:
+                if square.box == row_number:
                     box_poss.append([square.possible, square.x_cor, square.y_cor])
 
             # Count the number of times the number exists in the lists
             for number in range(9):
 
-                row_counter = 0
-                row_right_index = 0
-                column_counter = 0
-                column_right_index = 0
                 box_counter = 0
                 box_x_cor = 0
                 box_y_cor = 0
 
-                for possibility, row_index in zip(row_poss, range(len(row_poss))):
-                    if number in possibility:
-                        row_counter += 1
-                        row_right_index = row_index
-                for possibility, column_index in zip(column_poss, range(len(column_poss))):
-                    if number in possibility:
-                        column_counter += 1
-                        column_right_index = column_index
                 for possibility in box_poss:
                     if number in possibility[0]:
                         box_counter += 1
                         box_x_cor = possibility[1]
                         box_y_cor = possibility[2]
 
-                if row_counter == 1:
-                    for square in self.squares:
-                        if square.y_cor == index and square.x_cor == row_right_index:
-                            square.number = number
-                            square.possible = [number]
-                if column_counter == 1:
-                    for square in self.squares:
-                        if square.x_cor == index and square.y_cor == column_right_index:
-                            square.number = number
-                            square.possible = [number]
                 if box_counter == 1:
                     for square in self.squares:
                         if square.x_cor == box_x_cor and square.y_cor == box_y_cor:

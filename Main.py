@@ -24,7 +24,7 @@ class SudokuSolver:
             self.check_possibilities()
 
             # Remove the square possibilities base on combinations of other combinations
-            self.remove_possibilities_combinations()
+            #self.remove_possibilities_combinations()
 
             self.tries += 1       # Count the number of iterations
 
@@ -196,12 +196,27 @@ class SudokuSolver:
                     row_possibilities.append(square.possible)
 
             # Check if there is any combinations of possibilities that is the same in row_possibilities
-            for possibility in row_possibilities:
+            for possibility, index in zip(row_possibilities, range(len(row_possibilities))):
                 if len(possibility) == 2:   # Only remove if there are two possibilities
                     # Loop through the possibilities and test if the elements are in other possibilities
-                    for possibility_tested in row_possibilities:
-                        if all(elem in possibility for elem in possibility_tested):
-                            pass
+                    same_poss_counter = 0
+                    couple_square = 0
+                    for possibility_tested, index_tested in zip(row_possibilities, range(len(row_possibilities))):
+                        if index != index_tested:
+                            if all(numbers in possibility for numbers in possibility_tested):
+                                couple_square = index_tested
+                                same_poss_counter += 1
+
+                    if same_poss_counter == 1:
+                        for square in self.squares:
+                            if square.y_cor == row_number:
+                                if square.x_cor != index and square.x_cor != couple_square:
+                                    if possibility[0] in square.possible:
+                                        square.possible.remove(possibility[0])
+                                    if possibility[1] in square.possible:
+                                        square.possible.remove(possibility[1])
+                                elif square.x_cor == couple_square:
+                                    square.possible = possibility
 
     def remove_possibilities_simple(self):
         """ A method that checks the rows, columns and boxes and removes any simple possibilities for the Squares"""

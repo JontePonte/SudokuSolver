@@ -15,13 +15,13 @@ class SudokuSolver:
         self.max_tries = 100
         self.print_sudoku()
 
-        # Try to solve as long as the sudoku is not finnished
+        """ Try to solve as long as the sudoku is not finnished """
         while not self.is_finished():
             # Remove the squares possibilities base on rows, columns, and boxes
             self.remove_possibilities_simple()
 
             # Set numbers if they are possible just ones in a row, column or box
-            self.check_possibilities_simple()
+            self.check_possibilities()
 
             # Remove the square possibilities base on combinations of other combinations
             self.remove_possibilities_combinations()
@@ -31,7 +31,7 @@ class SudokuSolver:
         # Print the sudoku output
         self.print_sudoku()
 
-    def check_possibilities_simple(self):
+    def check_possibilities(self):
         """ Set numbers if they are possible just ones in a row, column or box"""
 
         """ Check if a possibility appears just once i the rows """
@@ -117,7 +117,6 @@ class SudokuSolver:
                             square.number = number
                             square.possible = [number]
 
-
     def is_finished(self):
         """ Check if the win or fail conditions has ben met """
 
@@ -186,7 +185,23 @@ class SudokuSolver:
 
     def remove_possibilities_combinations(self):
         """ Remove possibilities based on combination of the other squares combinations """
-        pass
+
+        """ Remove possibilities based on combinations of possibilities in the rows """
+        # Loop through all the squares and save the possibilities, one row at the time
+        for row_number in range(9):
+            # All possibilities are saved in row_possibilities
+            row_possibilities = []
+            for square in self.squares:
+                if square.y_cor == row_number:
+                    row_possibilities.append(square.possible)
+
+            # Check if there is any combinations of possibilities that is the same in row_possibilities
+            for possibility in row_possibilities:
+                if len(possibility) == 2:   # Only remove if there are two possibilities
+                    # Loop through the possibilities and test if the elements are in other possibilities
+                    for possibility_tested in row_possibilities:
+                        if all(elem in possibility for elem in possibility_tested):
+                            pass
 
     def remove_possibilities_simple(self):
         """ A method that checks the rows, columns and boxes and removes any simple possibilities for the Squares"""

@@ -70,4 +70,4 @@ sudoku_t = [[0, 0, 0, 0, 0, 0, 0, 0, 0],
 
 
 """ Decide which one to use """
-sudoku = sudoku_m
+sudoku = sudoku_h

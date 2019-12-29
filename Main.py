@@ -203,10 +203,13 @@ class SudokuSolver:
                     couple_square = 0
                     for possibility_tested, index_tested in zip(row_possibilities, range(len(row_possibilities))):
                         # Do not check the possibility on it self
-                        if index != index_tested:
+                        if not index == index_tested:
                             if all(numbers in possibility for numbers in possibility_tested):
                                 couple_square = index_tested    # Save the tested squares x-coordinate
                                 same_poss_counter += 1          # Count the number of times they are found
+                                print(possibility)
+                                print(possibility_tested)
+                                print(same_poss_counter)
 
                     # If they are found just ones remove the possibilities from every other square
                     if same_poss_counter == 1:

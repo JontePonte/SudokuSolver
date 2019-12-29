@@ -198,15 +198,17 @@ class SudokuSolver:
             # Check if there is any combinations of possibilities that is the same in row_possibilities
             for possibility, index in zip(row_possibilities, range(len(row_possibilities))):
                 if len(possibility) == 2:   # Only remove if there are two possibilities
-                    # Loop through the possibilities and test if the elements are in other possibilities
+                    # Loop through the possibilities and test if the numbers are in other possibilities
                     same_poss_counter = 0
                     couple_square = 0
                     for possibility_tested, index_tested in zip(row_possibilities, range(len(row_possibilities))):
+                        # Do not check the possibility on it self
                         if index != index_tested:
                             if all(numbers in possibility for numbers in possibility_tested):
-                                couple_square = index_tested
-                                same_poss_counter += 1
+                                couple_square = index_tested    # Save the tested squares x-coordinate
+                                same_poss_counter += 1          # Count the number of times they are found
 
+                    # If they are found just ones remove the possibilities from every other square
                     if same_poss_counter == 1:
                         for square in self.squares:
                             if square.y_cor == row_number:
@@ -215,9 +217,9 @@ class SudokuSolver:
                                         square.possible.remove(possibility[0])
                                     if possibility[1] in square.possible:
                                         square.possible.remove(possibility[1])
+                                # Save the possibility in the coupled square
                                 elif square.x_cor == couple_square:
                                     square.possible = possibility
-
 
     def remove_possibilities_simple(self):
         """ A method that checks the rows, columns and boxes and removes any simple possibilities for the Squares"""

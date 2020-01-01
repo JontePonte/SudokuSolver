@@ -26,7 +26,7 @@ class SudokuSolver:
             # Remove the square possibilities base on combinations of other combinations
             self.remove_possibilities_combinations()
 
-            self.tries += 1       # Count the number of iterations
+            self.tries += 1  # Count the number of iterations
 
         # Print the sudoku output
         self.print_sudoku()
@@ -45,8 +45,8 @@ class SudokuSolver:
             # Count the number of times each number exists in row_possibilities
             for number in range(1, 10):
 
-                number_counter = 0      # The number of times a number appears in row_possibilities
-                right_x_cor = 0         # The right x coordinate for the number
+                number_counter = 0  # The number of times a number appears in row_possibilities
+                right_x_cor = 0  # The right x coordinate for the number
 
                 # Do the counting, if a number appears once ==> number_counter == 1
                 for possibility, x_cor in zip(row_possibilities, range(len(row_possibilities))):
@@ -72,8 +72,8 @@ class SudokuSolver:
             # Count the number of times each number exists in column_possibilities
             for number in range(1, 10):
 
-                number_counter = 0      # The number of times a number appears in column_possibilities
-                right_y_cor = 0         # The right y coordinate for the number
+                number_counter = 0  # The number of times a number appears in column_possibilities
+                right_y_cor = 0  # The right y coordinate for the number
 
                 # Do the counting, if a number appears once ==> number_counter == 1
                 for possibility, y_cor in zip(column_possibilities, range(len(column_possibilities))):
@@ -107,7 +107,7 @@ class SudokuSolver:
                 for possibility in box_poss:
                     if number in possibility[0]:
                         box_counter += 1
-                        box_x_cor = possibility[1]      # Save coordinates for the right box
+                        box_x_cor = possibility[1]  # Save coordinates for the right box
                         box_y_cor = possibility[2]
 
                 # Put the number in the right place if it appears just once
@@ -150,12 +150,12 @@ class SudokuSolver:
         for row in sudoku:
             x = 0
             for number in row:
-                square = Square()                   # Create a Square-object
-                square.number = number              # Save the number in the Square-object
-                if number != 0:                     # If the number is known
-                    square.possible = [number]      # then the number is the only possibility
+                square = Square()  # Create a Square-object
+                square.number = number  # Save the number in the Square-object
+                if number != 0:  # If the number is known
+                    square.possible = [number]  # then the number is the only possibility
                 square.id_num = id_num
-                square.x_cor = x                    # Save the coordinates in Square-object
+                square.x_cor = x  # Save the coordinates in Square-object
                 square.y_cor = y
 
                 # Call a method that calculates the box number
@@ -193,36 +193,48 @@ class SudokuSolver:
             row_possibilities = []
             for square in self.squares:
                 if square.y_cor == row_number:
-                    row_possibilities.append(square.possible)
+                    # Save the x & y coordinates together with the possibility list
+                    info = [square.possible, square.x_cor, square.y_cor]
+                    row_possibilities.append(info)
 
-            # Check if there is any combinations of possibilities that is the same in row_possibilities
-            for possibility, index in zip(row_possibilities, range(len(row_possibilities))):
-                if len(possibility) == 2:   # Only remove if there are two possibilities
-                    # Loop through the possibilities and test if the numbers are in other possibilities
-                    same_poss_counter = 0
-                    couple_square = 0
-                    for possibility_tested, index_tested in zip(row_possibilities, range(len(row_possibilities))):
-                        # Do not check the possibility on it self
-                        if not index == index_tested:
-                            if all(numbers in possibility for numbers in possibility_tested):
-                                couple_square = index_tested    # Save the tested squares x-coordinate
-                                same_poss_counter += 1          # Count the number of times they are found
-                                print(possibility)
-                                print(possibility_tested)
-                                print(same_poss_counter)
+            # Step through all possibilities of length 2
+            # First digit
+            for first in range(1, 9):
+                # Second digit
+                for second in range(first, 10):
+                    if first == second:
+                        pass
+                    # This creates all two digit combinations with 1 to 9
+                    else:
+                        combination = [first, second]
+                        counter = 0
+                        x_vector = []
+                        y_vector = []
 
-                    # If they are found just ones remove the possibilities from every other square
-                    if same_poss_counter == 1:
-                        for square in self.squares:
-                            if square.y_cor == row_number:
-                                if square.x_cor != index and square.x_cor != couple_square:
-                                    if possibility[0] in square.possible:
-                                        square.possible.remove(possibility[0])
-                                    if possibility[1] in square.possible:
-                                        square.possible.remove(possibility[1])
-                                # Save the possibility in the coupled square
-                                elif square.x_cor == couple_square:
-                                    square.possible = possibility
+                        # Count the number of times the combinations appears in the possibilities
+                        for possibility in row_possibilities:
+                            if combination[0] in possibility[0] and combination[1] in possibility[0]:
+                                counter += 1
+                                x_vector.append(possibility[1])
+                                y_vector.append(possibility[2])
+
+                        if counter == 2:
+                            print(combination, "   comb")
+                            print(x_vector, "   x_vector")
+                            print(y_vector, "   y_vector")
+                            if not True:
+                                # Set the possibility of the two squares to the tested combination
+                                for square in self.squares:
+                                    if square.x_cor == x_vector[0] and square.y_cor == y_vector[0]:
+                                        square.possible = combination
+                                    elif square.x_cor == x_vector[1] and square.y_cor == y_vector[1]:
+                                        square.possible = combination
+                                    elif square.y_cor == row_number and square.x_cor != x_vector[0] \
+                                            and square.x_cor != x_vector[1]:
+                                        if combination[0] in square.possible:
+                                            square.possible.remove(combination[0])
+                                        if combination[1] in square.possible:
+                                            square.possible.remove(combination[1])
 
     def remove_possibilities_simple(self):
         """ A method that checks the rows, columns and boxes and removes any simple possibilities for the Squares"""

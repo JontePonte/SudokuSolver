@@ -270,7 +270,7 @@ class SudokuSolver:
             if square_check.number == 0:
                 # loop through all the other squares
                 for square_loop in self.squares:
-                    # Check if looped square is in the same row, column or box as the cecked square
+                    # Check if looped square is in the same row, column or box as the checked square
                     if (square_check.x_cor == square_loop.x_cor
                             or square_check.y_cor == square_loop.y_cor
                             or square_check.box == square_loop.box):

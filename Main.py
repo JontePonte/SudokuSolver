@@ -24,7 +24,7 @@ class SudokuSolver:
             self.check_possibilities()
 
             # Remove the square possibilities base on combinations of other combinations
-            self.remove_possibilities_combinations()
+            self.remove_possibilities_combinations_of_2()
 
             self.tries += 1  # Count the number of iterations
 
@@ -183,7 +183,7 @@ class SudokuSolver:
             print(row)
         print(" ")
 
-    def remove_possibilities_combinations(self):
+    def remove_possibilities_combinations_of_2(self):
         """ Remove possibilities based on combination of the other squares combinations """
 
         """ Remove possibilities based on combinations of possibilities in the rows """

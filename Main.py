@@ -332,6 +332,76 @@ class SudokuSolver:
                                 if square.x_cor == x_vector[1] and square.y_cor == y_vector[1]:
                                     square.possible = combination
 
+        """ Remove possibilities based on combinations of two of possibilities in the boxes """
+        # Loop through all the squares and save the possibilities, one box at the time
+        for box_number in range(9):
+            # All possibilities are saved in box_possibilities
+            box_possibilities = []
+            for square in self.squares:
+                if square.box == box_number:
+                    # Save the x & y coordinates together with the possibility list
+                    info = [square.possible, square.x_cor, square.y_cor]
+                    box_possibilities.append(info)
+
+            # Step through all possibilities of length 2
+            for first in range(1, 9):  # First digit
+                for second in range(first, 10):  # Second digit
+                    # This creates all two digit combinations with 1 to 9
+                    if first == second:
+                        pass
+                    else:
+                        combination = [first, second]  # Vector with the two tested numbers
+
+                        " This part tests if a combination appears just twice"
+                        counter = 0
+                        x_vector = []
+                        y_vector = []
+
+                        # Count the number of times the combinations appears in the possibilities
+                        for possibility in column_possibilities:
+                            if combination == possibility[0]:
+                                counter += 1
+                                # Save the coordinates in the possibility list
+                                x_vector.append(possibility[1])
+                                y_vector.append(possibility[2])
+
+                        # Remove the combination from all other squares if it just appears twice
+                        if counter == 2:
+                            for square in self.squares:
+                                # Do not remove the combination from the found squares
+                                if square.x_cor == column_number and square.y_cor != y_vector[0] \
+                                        and square.y_cor != y_vector[1]:
+                                    if combination[0] in square.possible:
+                                        square.possible.remove(combination[0])
+                                    if combination[1] in square.possible:
+                                        square.possible.remove(combination[1])
+
+                        " Tis part checks if two number only are possible in two squares "
+                        counter = 0
+                        x_vector = []
+                        y_vector = []
+
+                        # Count the number of times just the two numbers appears in the possibilities
+                        for possibility in column_possibilities:
+                            if combination[0] in possibility[0] and combination[1] in possibility[0]:
+                                counter += 1
+                                # Save the coordinates in the possibility list
+                                x_vector.append(possibility[1])
+                                y_vector.append(possibility[2])
+
+                            elif combination[0] in possibility[0]:
+                                counter += 3
+                            elif combination[1] in possibility[0]:
+                                counter += 3
+
+                        if counter == 2:
+                            for square in self.squares:
+                                # Remove all other possibilities from the two squares
+                                if square.x_cor == x_vector[0] and square.y_cor == y_vector[0]:
+                                    square.possible = combination
+                                if square.x_cor == x_vector[1] and square.y_cor == y_vector[1]:
+                                    square.possible = combination
+
     def remove_possibilities_simple(self):
         """ A method that checks the rows, columns and boxes and removes any simple possibilities for the Squares"""
         # Loop through the squares to check them

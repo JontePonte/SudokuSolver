@@ -358,7 +358,7 @@ class SudokuSolver:
                         y_vector = []
 
                         # Count the number of times the combinations appears in the possibilities
-                        for possibility in column_possibilities:
+                        for possibility in box_possibilities:
                             if combination == possibility[0]:
                                 counter += 1
                                 # Save the coordinates in the possibility list
@@ -369,12 +369,13 @@ class SudokuSolver:
                         if counter == 2:
                             for square in self.squares:
                                 # Do not remove the combination from the found squares
-                                if square.x_cor == column_number and square.y_cor != y_vector[0] \
-                                        and square.y_cor != y_vector[1]:
-                                    if combination[0] in square.possible:
-                                        square.possible.remove(combination[0])
-                                    if combination[1] in square.possible:
-                                        square.possible.remove(combination[1])
+                                if square.box == box_number:
+                                    if square.x_cor != x_vector[0] and square.y_cor != y_vector[0]:
+                                        if square.x_cor != x_vector[1] and square.y_cor != y_vector[1]:
+                                            if combination[0] in square.possible:
+                                                square.possible.remove(combination[0])
+                                            if combination[1] in square.possible:
+                                                square.possible.remove(combination[1])
 
                         " Tis part checks if two number only are possible in two squares "
                         counter = 0
@@ -382,7 +383,7 @@ class SudokuSolver:
                         y_vector = []
 
                         # Count the number of times just the two numbers appears in the possibilities
-                        for possibility in column_possibilities:
+                        for possibility in box_possibilities:
                             if combination[0] in possibility[0] and combination[1] in possibility[0]:
                                 counter += 1
                                 # Save the coordinates in the possibility list

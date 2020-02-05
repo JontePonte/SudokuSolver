@@ -24,7 +24,7 @@ class SudokuSolver:
             self.check_possibilities()
 
             # Remove the square possibilities base on combinations of other combinations
-            self.remove_possibilities_combinations_of_2()
+            #self.remove_possibilities_combinations_of_2()
 
             self.tries += 1  # Count the number of iterations
 
@@ -263,6 +263,7 @@ class SudokuSolver:
                                     square.possible = combination
 
         """ Remove possibilities based on combinations of two of possibilities in the columns """
+        """
         # Loop through all the squares and save the possibilities, one columns at the time
         for column_number in range(9):
             # All possibilities are saved in column_possibilities
@@ -332,7 +333,9 @@ class SudokuSolver:
                                 if square.x_cor == x_vector[1] and square.y_cor == y_vector[1]:
                                     square.possible = combination
 
+"""
         """ Remove possibilities based on combinations of two of possibilities in the boxes """
+        """
         # Loop through all the squares and save the possibilities, one box at the time
         for box_number in range(9):
             # All possibilities are saved in box_possibilities
@@ -402,6 +405,7 @@ class SudokuSolver:
                                     square.possible = combination
                                 if square.x_cor == x_vector[1] and square.y_cor == y_vector[1]:
                                     square.possible = combination
+            """
 
     def remove_possibilities_simple(self):
         """ A method that checks the rows, columns and boxes and removes any simple possibilities for the Squares"""
